@@ -1,0 +1,632 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Bíblia Moderna Digital | Áudio Completo + Mapas + Lídia & Líbia</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #0E1C2A 0%, #142834 100%);
+      font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Roboto', sans-serif;
+      color: #F9F3E2;
+      padding: 0 12px 70px;
+      min-height: 100vh;
+    }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #1A2F3F; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
+
+    .app-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* Header com logo imagem */
+    .header-modern {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0 12px;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 10px 20px;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: white;
+      padding: 4px;
+      border: 2px solid #D4AF37;
+      object-fit: contain;
+    }
+    .logo-text {
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #FFF2D0, #E6B33E);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .badge-version {
+      background: #A67C2E40;
+      padding: 4px 12px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      border: 1px solid #D4AF37;
+    }
+
+    /* Mural */
+    .mural-card {
+      background: linear-gradient(135deg, #1F2F3C, #11212E);
+      border-radius: 32px;
+      padding: 20px;
+      margin-bottom: 24px;
+      border: 1px solid #D4AF37;
+      box-shadow: 0 20px 30px -15px rgba(0,0,0,0.5);
+    }
+    .mural-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #E2B13C;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .mural-versiculo {
+      font-size: 1.5rem;
+      font-style: italic;
+      line-height: 1.3;
+      font-weight: 500;
+      background: rgba(0,0,0,0.4);
+      padding: 16px;
+      border-radius: 24px;
+      margin: 12px 0;
+    }
+    .mural-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn-audio, .btn-stop, .btn-google {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 40px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-audio { background: #5a3e1b; color: #FFF2D7; }
+    .btn-stop { background: #8B3C2C; color: white; }
+    .btn-google { background: #2c6e4f; color: white; }
+    
+    .glass-card {
+      background: rgba(15, 30, 45, 0.75);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      padding: 18px 16px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+    .selector-area {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .book-select, .chapter-select {
+      flex: 1;
+      padding: 12px 16px;
+      border-radius: 60px;
+      background: #1e3a4d;
+      border: 1px solid #e2a526;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .book-content {
+      margin-top: 8px;
+    }
+    .book-title {
+      font-size: 1.6rem;
+      border-left: 6px solid #e2a526;
+      padding-left: 14px;
+      margin-bottom: 16px;
+    }
+    .cultural-img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 24px;
+      margin: 12px 0;
+      border: 1px solid #D4AF37;
+      transition: transform 0.3s ease;
+    }
+    .cultural-img:hover {
+      transform: scale(1.02);
+    }
+    .chapter-text {
+      background: #00000050;
+      padding: 18px;
+      border-radius: 24px;
+      margin: 16px 0;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      max-height: 320px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 12px 0;
+    }
+    .history-section {
+      background: #10232F;
+      border-radius: 32px;
+      padding: 16px;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-size: 1.3rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid #D4AF37;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .photo-grid {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+    .photo-grid img {
+      min-width: 160px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 1px solid #C2A141;
+    }
+    .tribe-map {
+      width: 100%;
+      border-radius: 20px;
+      margin: 12px 0;
+      transition: transform 0.3s ease;
+    }
+    .tribe-map:hover {
+      transform: scale(1.01);
+    }
+    .tribe-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 10px;
+    }
+    .tribe-badge {
+      background: #A57C2C;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid #EFC368;
+    }
+    .tribe-badge:hover {
+      background: #D4AF37;
+      color: #0E1C2A;
+      transform: scale(1.02);
+    }
+    .tribe-detail-panel {
+      margin-top: 20px;
+      background: #1E2F3A;
+      border-radius: 28px;
+      padding: 16px;
+      border-left: 6px solid #E2B13C;
+    }
+    .images-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 15px 0;
+      justify-content: center;
+    }
+    .images-row figure {
+      flex: 1;
+      min-width: 160px;
+      text-align: center;
+      background: #00000030;
+      border-radius: 24px;
+      padding: 8px;
+    }
+    .images-row img {
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 2px solid #D4AF37;
+      transition: transform 0.3s ease;
+    }
+    .images-row img:hover {
+      transform: scale(1.05);
+    }
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1F2F3C;
+      backdrop-filter: blur(20px);
+      padding: 12px 24px;
+      border-radius: 60px;
+      color: #FFE7B6;
+      border-left: 5px solid #F4B642;
+      z-index: 2000;
+      font-size: 0.85rem;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      text-align: center;
+      max-width: 90vw;
+    }
+    .loader {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid #D4AF37;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 0.6s linear infinite;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <!-- Cabeçalho com logo imagem -->
+  <div class="header-modern">
+    <div class="logo-area">
+      <img src="https://cdn-icons-png.flaticon.com/512/833/833314.png" class="logo-img" alt="Logo Bíblia">
+      <span class="logo-text">Bíblia Moderna Digital</span>
+    </div>
+    <div class="badge-version">🎙️ Áudio completo | Voz suave PT-BR</div>
+  </div>
+
+  <!-- Mural motivacional -->
+  <div class="mural-card">
+    <div class="mural-title"><span>🌟 MURAL DE MOTIVAÇÃO DIÁRIA</span> <span>📅 <span id="currentDate"></span></span></div>
+    <img id="muralImage" src="" style="width:100%; max-height:180px; object-fit:cover; border-radius:24px; margin-bottom:10px; border:1px solid #e2a526;" alt="Motivação">
+    <div class="mural-versiculo" id="muralVerseText">Carregando...</div>
+    <div class="mural-footer">
+      <button class="btn-audio" id="muralAudioOffline">🎧 Ouvir (voz suave)</button>
+      <button class="btn-google" id="muralAudioOnline">🌐 Ouvir Online (Google)</button>
+    </div>
+  </div>
+
+  <!-- Leitor Bíblico com áudio completo -->
+  <div class="glass-card">
+    <div class="selector-area">
+      <select id="bookSelect" class="book-select"></select>
+      <select id="chapterSelect" class="chapter-select"></select>
+    </div>
+    <div id="bookDynamicContent">
+      <p style="text-align:center;">📖 Selecione um livro e capítulo para ler e ouvir a Bíblia completa com voz suave.</p>
+    </div>
+  </div>
+
+  <!-- Seção histórica: Cidade de Davi + Tribos + Mapas duplos -->
+  <div class="history-section">
+    <div class="section-title">🏛️ CIDADE DE DAVI - Época Bíblica</div>
+    <div class="photo-grid">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/City_of_David_Jerusalem.jpg" alt="Cidade de Davi">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/0e/Stepped_Stone_Structure_City_of_David.jpg" alt="Escavações">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/42/Western_Wall_Jerusalem.jpg" alt="Muro das Lamentações">
+    </div>
+    
+    <div class="section-title" style="margin-top:16px;">🗺️ MAPA DAS 12 TRIBOS DE ISRAEL</div>
+    <img class="tribe-map" src="https://upload.wikimedia.org/wikipedia/commons/6/6d/12_Tribes_of_Israel_Map.svg" alt="Mapa 12 Tribos" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/3/3a/Map_of_the_Twelve_Tribes_of_Israel.jpg'">
+    <div class="tribe-list" id="tribeNamesList"></div>
+    <div id="tribeDetailPanel" class="tribe-detail-panel" style="display: none;"></div>
+    
+    <div class="section-title" style="margin-top:16px;">🏰 REINOS DE ISRAEL & JUDÁ</div>
+    <img class="tribe-map" src="https://upload.wikimedia.org/wikipedia/commons/1/17/Kingdoms_of_Israel_and_Judah_map_830.svg" alt="Reinos de Israel e Judá" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/6/6d/12_Tribes_of_Israel_Map.svg'">
+    
+    <!-- NOVA SEÇÃO: LÍDIA E LÍBIA -->
+    <div class="section-title" style="margin-top:16px;">🌍 CIDADE / REGIÃO DE LÍDIA E LÍBIA</div>
+    <div class="images-row">
+      <figure>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Ancient_Lydia_map.jpg" alt="Lídia" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/6/6f/Creation_of_Light.png'">
+        <figcaption>Lídia (Ásia Menor)</figcaption>
+      </figure>
+      <figure>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Libya_desert.jpg" alt="Líbia" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/6/6f/Creation_of_Light.png'">
+        <figcaption>Líbia (África)</figcaption>
+      </figure>
+      <figure>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Philippi_ruins.jpg" alt="Filipos" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/6/6f/Creation_of_Light.png'">
+        <figcaption>Filipos (onde Lídia foi convertida)</figcaption>
+      </figure>
+    </div>
+    <p style="margin-top:10px;">📖 Lídia foi a primeira convertida ao cristianismo na Europa (Atos 16). Já a Líbia aparece em contextos históricos do mundo bíblico.</p>
+    <button class="btn-audio" id="lydiaLibyaAudioBtn">🎧 Ouvir contexto</button>
+
+    <button id="jesusEraBtn" style="margin-top:12px; background:#6b3e1b; border:none; border-radius:30px; padding:10px; font-weight:bold; cursor:pointer;">🕊️ Ver Época de Jesus + Contexto</button>
+    <div id="jesusEraPanel" style="margin-top:12px;"></div>
+  </div>
+  <footer>🎧 Áudio completo da Bíblia (voz suave portuguesa) - Clique nas tribos para explorar imagens históricas.</footer>
+</div>
+<div id="toastMsg" class="toast" style="opacity:0;"></div>
+
+<script>
+  // ======================== LIVROS E MAPEAMENTO ========================
+  const booksOfBible = [
+    "Gênesis", "Êxodo", "Levítico", "Números", "Deuteronômio", "Josué", "Juízes", "Rute", "1 Samuel", "2 Samuel", "1 Reis", "2 Reis", "1 Crônicas", "2 Crônicas", "Esdras", "Neemias", "Ester", "Jó", "Salmos", "Provérbios", "Eclesiastes", "Cantares", "Isaías", "Jeremias", "Lamentações", "Ezequiel", "Daniel", "Oséias", "Joel", "Amós", "Obadias", "Jonas", "Miqueias", "Naum", "Habacuque", "Sofonias", "Ageu", "Zacarias", "Malaquias", "Mateus", "Marcos", "Lucas", "João", "Atos", "Romanos", "1 Coríntios", "2 Coríntios", "Gálatas", "Efésios", "Filipenses", "Colossenses", "1 Tessalonicenses", "2 Tessalonicenses", "1 Timóteo", "2 Timóteo", "Tito", "Filemom", "Hebreus", "Tiago", "1 Pedro", "2 Pedro", "1 João", "2 João", "3 João", "Judas", "Apocalipse"
+  ];
+  const chaptersCount = {
+    "Gênesis":50,"Êxodo":40,"Levítico":27,"Números":36,"Deuteronômio":34,"Josué":24,"Juízes":21,"Rute":4,"1 Samuel":31,"2 Samuel":24,"1 Reis":22,"2 Reis":25,"1 Crônicas":29,"2 Crônicas":36,"Esdras":10,"Neemias":13,"Ester":10,"Jó":42,"Salmos":150,"Provérbios":31,"Eclesiastes":12,"Cantares":8,"Isaías":66,"Jeremias":52,"Lamentações":5,"Ezequiel":48,"Daniel":12,"Oséias":14,"Joel":3,"Amós":9,"Obadias":1,"Jonas":4,"Miqueias":7,"Naum":3,"Habacuque":3,"Sofonias":3,"Ageu":2,"Zacarias":14,"Malaquias":4,"Mateus":28,"Marcos":16,"Lucas":24,"João":21,"Atos":28,"Romanos":16,"1 Coríntios":16,"2 Coríntios":13,"Gálatas":6,"Efésios":6,"Filipenses":4,"Colossenses":4,"1 Tessalonicenses":5,"2 Tessalonicenses":3,"1 Timóteo":6,"2 Timóteo":4,"Tito":3,"Filemom":1,"Hebreus":13,"Tiago":5,"1 Pedro":5,"2 Pedro":3,"1 João":5,"2 João":1,"3 João":1,"Judas":1,"Apocalipse":22
+  };
+  const bookNameMap = {
+    "Gênesis":"Genesis","Êxodo":"Exodus","Levítico":"Leviticus","Números":"Numbers","Deuteronômio":"Deuteronomy","Josué":"Joshua","Juízes":"Judges","Rute":"Ruth","1 Samuel":"1 Samuel","2 Samuel":"2 Samuel","1 Reis":"1 Kings","2 Reis":"2 Kings","1 Crônicas":"1 Chronicles","2 Crônicas":"2 Chronicles","Esdras":"Ezra","Neemias":"Nehemiah","Ester":"Esther","Jó":"Job","Salmos":"Psalms","Provérbios":"Proverbs","Eclesiastes":"Ecclesiastes","Cantares":"Song of Solomon","Isaías":"Isaiah","Jeremias":"Jeremiah","Lamentações":"Lamentations","Ezequiel":"Ezekiel","Daniel":"Daniel","Oséias":"Hosea","Joel":"Joel","Amós":"Amos","Obadias":"Obadiah","Jonas":"Jonah","Miqueias":"Micah","Naum":"Nahum","Habacuque":"Habakkuk","Sofonias":"Zephaniah","Ageu":"Haggai","Zacarias":"Zechariah","Malaquias":"Malachi","Mateus":"Matthew","Marcos":"Mark","Lucas":"Luke","João":"John","Atos":"Acts","Romanos":"Romans","1 Coríntios":"1 Corinthians","2 Coríntios":"2 Corinthians","Gálatas":"Galatians","Efésios":"Ephesians","Filipenses":"Philippians","Colossenses":"Colossians","1 Tessalonicenses":"1 Thessalonians","2 Tessalonicenses":"2 Thessalonians","1 Timóteo":"1 Timothy","2 Timóteo":"2 Timothy","Tito":"Titus","Filemom":"Philemon","Hebreus":"Hebrews","Tiago":"James","1 Pedro":"1 Peter","2 Pedro":"2 Peter","1 João":"1 John","2 João":"2 John","3 João":"3 John","Judas":"Jude","Apocalipse":"Revelation"
+  };
+
+  // ======================== IMAGEM DOS LIVROS (melhorada) ========================
+  function getBookImage(book) {
+    const map = {
+      "Gênesis":"https://upload.wikimedia.org/wikipedia/commons/5/5c/Creation_of_Adam_Michelangelo.jpg",
+      "Êxodo":"https://upload.wikimedia.org/wikipedia/commons/9/9b/Moses_red_sea.jpg",
+      "Salmos":"https://upload.wikimedia.org/wikipedia/commons/e/e9/David_playing_the_harp.jpg",
+      "Provérbios":"https://upload.wikimedia.org/wikipedia/commons/3/3d/King_Solomon.jpg",
+      "Isaías":"https://upload.wikimedia.org/wikipedia/commons/7/7c/Isaiah_scroll.jpg",
+      "Daniel":"https://upload.wikimedia.org/wikipedia/commons/3/3c/Daniel_lions_den.jpg",
+      "Mateus":"https://upload.wikimedia.org/wikipedia/commons/6/6b/Jesus_Christ_Pantocrator.jpg",
+      "João":"https://upload.wikimedia.org/wikipedia/commons/4/4f/Last_Supper_Leonardo.jpg",
+      "Apocalipse":"https://upload.wikimedia.org/wikipedia/commons/2/2c/Apocalypse_vasnetsov.jpg"
+    };
+    return map[book] || "https://upload.wikimedia.org/wikipedia/commons/6/6f/Creation_of_Light.png";
+  }
+
+  // ======================== ÁUDIO COM VOZ SUAVE ========================
+  let currentSpeech = null;
+  function getSoftVoice() {
+    return new Promise((resolve) => {
+      const synth = window.speechSynthesis;
+      let voices = synth.getVoices();
+      if (voices.length) {
+        let selected = voices.find(v => (v.lang === 'pt-BR' && (v.name.toLowerCase().includes('google') || v.name.toLowerCase().includes('maria') || v.name.toLowerCase().includes('samantha')))) || voices.find(v => v.lang === 'pt-BR');
+        resolve(selected || voices[0]);
+      } else {
+        synth.onvoiceschanged = () => {
+          voices = synth.getVoices();
+          let selected = voices.find(v => v.lang === 'pt-BR');
+          resolve(selected || voices[0]);
+        };
+      }
+    });
+  }
+  async function speakSoftText(text, title = "Leitura") {
+    if (!window.speechSynthesis) { showToast("Seu navegador não suporta áudio offline.", 2000); return; }
+    if (currentSpeech) window.speechSynthesis.cancel();
+    const cleanText = text.replace(/<[^>]*>/g, '').replace(/[0-9]+:[0-9]+/g, '').substring(0, 3800);
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'pt-BR';
+    utterance.rate = 0.85;
+    utterance.pitch = 1.05;
+    utterance.volume = 1;
+    const voice = await getSoftVoice();
+    if (voice) utterance.voice = voice;
+    utterance.onstart = () => showToast(`🔊 Ouvindo: ${title} — voz suave`, 2000);
+    utterance.onend = () => { currentSpeech = null; showToast(`✅ Leitura finalizada: ${title}`, 2000); };
+    utterance.onerror = () => showToast("Erro no áudio.", 1500);
+    currentSpeech = utterance;
+    window.speechSynthesis.speak(utterance);
+  }
+  function stopSpeaking() {
+    if (window.speechSynthesis) { window.speechSynthesis.cancel(); currentSpeech = null; showToast("⏹️ Leitura interrompida.", 1500); }
+  }
+  function openGoogleAudio(text, titulo) {
+    const clean = text.replace(/<[^>]*>/g, '').substring(0, 800);
+    const url = `https://translate.google.com/?hl=pt-BR&sl=pt&tl=pt&text=${encodeURIComponent(clean)}&op=translate`;
+    window.open(url, '_blank');
+    showToast(`🌐 Google Tradutor: clique no ícone de áudio para ouvir "${titulo}"`, 4000);
+  }
+  function showToast(msg, dur = 2500) {
+    const toast = document.getElementById("toastMsg");
+    toast.innerText = msg;
+    toast.style.opacity = "1";
+    setTimeout(() => toast.style.opacity = "0", dur);
+  }
+
+  // ======================== BUSCAR CAPÍTULO DA BÍBLIA (API) ========================
+  async function fetchFullChapter(bookPortuguese, chapter) {
+    const bookEng = bookNameMap[bookPortuguese];
+    if (!bookEng) throw new Error("Livro não encontrado");
+    const url = `https://bible-api.com/${bookEng}+${chapter}?translation=acf&verse_numbers=false`;
+    showToast("📖 Carregando capítulo...", 1500);
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+      let text = data.text || "";
+      text = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+      if (!text.length) throw new Error("Texto vazio");
+      return text;
+    } catch (err) {
+      console.error(err);
+      return `Estudos da Palavra em ${bookPortuguese} capítulo ${chapter}. “Examinai as Escrituras, porque julgais ter nelas a vida eterna.” (João 5:39) Que este capítulo abençoe sua vida.`;
+    }
+  }
+
+  // ======================== CARREGAR CONTEÚDO DO LIVRO ========================
+  async function loadBookContent() {
+    const book = document.getElementById("bookSelect").value;
+    const chapter = parseInt(document.getElementById("chapterSelect").value);
+    const container = document.getElementById("bookDynamicContent");
+    container.innerHTML = `<div style="text-align:center; padding:20px;"><span class="loader"></span> Buscando ${book} ${chapter}...</div>`;
+    try {
+      const chapterText = await fetchFullChapter(book, chapter);
+      const imgSrc = getBookImage(book);
+      container.innerHTML = `
+        <div class="book-content">
+          <div class="book-title">📖 ${book} — Capítulo ${chapter}</div>
+          <img src="${imgSrc}" class="cultural-img" alt="ilustração" onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/6/6f/Creation_of_Light.png'">
+          <div class="chapter-text" id="chapterFullText">${chapterText}</div>
+          <div class="button-group">
+            <button id="playChapterAudio" class="btn-audio">🎧 Ouvir Capítulo (voz suave)</button>
+            <button id="stopAudioBtn" class="btn-stop">⏹️ Parar Áudio</button>
+            <button id="onlineAudioBtn" class="btn-google">🌐 Ouvir online (Google)</button>
+          </div>
+          <p style="font-size:0.7rem; margin-top:8px;">✨ Áudio com voz feminina suave em português do Brasil — texto completo do capítulo.</p>
+        </div>
+      `;
+      const fullTextForAudio = `${book} capítulo ${chapter}. ${chapterText}`;
+      document.getElementById("playChapterAudio").onclick = () => speakSoftText(fullTextForAudio, `${book} ${chapter}`);
+      document.getElementById("stopAudioBtn").onclick = () => stopSpeaking();
+      document.getElementById("onlineAudioBtn").onclick = () => openGoogleAudio(fullTextForAudio, `${book} ${chapter}`);
+    } catch (err) {
+      container.innerHTML = `<p style="color:#f5a97f;">Erro ao carregar capítulo. Tente novamente.</p>`;
+    }
+  }
+
+  function populateBooks() {
+    const select = document.getElementById("bookSelect");
+    select.innerHTML = "";
+    booksOfBible.forEach(b => { const opt = document.createElement("option"); opt.value = b; opt.textContent = b; select.appendChild(opt); });
+    updateChapters();
+  }
+  function updateChapters() {
+    const book = document.getElementById("bookSelect").value;
+    const max = chaptersCount[book] || 30;
+    const chapSelect = document.getElementById("chapterSelect");
+    chapSelect.innerHTML = "";
+    for (let i = 1; i <= max; i++) {
+      const opt = document.createElement("option"); opt.value = i; opt.textContent = `Capítulo ${i}`;
+      chapSelect.appendChild(opt);
+    }
+    loadBookContent();
+  }
+
+  // ========== MURAL MOTIVACIONAL ==========
+  const dailyMotivation = [
+    { verse:"“Este é o dia que o Senhor fez; regozijemo-nos e alegremo-nos nele.” (Salmos 118:24)", image:"https://upload.wikimedia.org/wikipedia/commons/e/e5/Sunday_mass.jpg" },
+    { verse:"“Não temas, porque eu sou contigo; não te assombres, porque eu sou o teu Deus.” (Isaías 41:10)", image:"https://upload.wikimedia.org/wikipedia/commons/3/3f/Christ_in_the_Storm_on_the_Lake_of_Galilee.jpg" },
+    { verse:"“O Senhor é minha luz e minha salvação; a quem temerei?” (Salmos 27:1)", image:"https://upload.wikimedia.org/wikipedia/commons/0/00/Good_Shepherd_2.jpg" },
+    { verse:"“Tudo posso naquele que me fortalece.” (Filipenses 4:13)", image:"https://upload.wikimedia.org/wikipedia/commons/a/a4/Joshua_Commanding_Sun_to_Stand_Still.jpg" },
+    { verse:"“O meu Deus suprirá todas as vossas necessidades.” (Filipenses 4:19)", image:"https://upload.wikimedia.org/wikipedia/commons/c/c3/Philippians_4.jpg" },
+    { verse:"“Vinde a mim todos os cansados… e eu vos aliviarei.” (Mateus 11:28)", image:"https://upload.wikimedia.org/wikipedia/commons/1/1b/Jesus_Calling_Disciples.jpg" },
+    { verse:"“Lembra-te do sábado para o santificar… descanse em Deus.” (Êxodo 20:8)", image:"https://upload.wikimedia.org/wikipedia/commons/6/6b/Sabbath_rest.jpg" }
+  ];
+  function updateMural() {
+    const idx = new Date().getDay();
+    const obj = dailyMotivation[idx % dailyMotivation.length];
+    document.getElementById("currentDate").innerText = new Date().toLocaleDateString('pt-BR');
+    document.getElementById("muralVerseText").innerHTML = obj.verse;
+    const muralImg = document.getElementById("muralImage");
+    muralImg.src = obj.image;
+    muralImg.onerror = () => muralImg.src = "https://upload.wikimedia.org/wikipedia/commons/6/6f/Creation_of_Light.png";
+    document.getElementById("muralAudioOffline").onclick = () => speakSoftText(`Versículo do dia: ${obj.verse}`, "Mural");
+    document.getElementById("muralAudioOnline").onclick = () => openGoogleAudio(obj.verse, "Mural do Dia");
+  }
+
+  // ========== TRIBOS INTERATIVAS ==========
+  const tribeNames = ["Rúben","Simeão","Levi","Judá","Dã","Naftali","Gade","Aser","Issacar","Zebulom","José (Manassés & Efraim)","Benjamim"];
+  const tribeHistoricalData = {
+    "Rúben": { desc:"Tribo a leste do Jordão.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/6/6e/Jordan_River_valley.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/3/3d/Sea_of_Galilee_-_Jesus_ministry.jpg" },
+    "Judá": { desc:"Tribo real de Davi.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/f/f5/Jerusalem_David_City.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/6/64/First_century_Israel_map.svg" },
+    "Levi": { desc:"Tribo sacerdotal.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/b/b5/Ancient_altar.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/a/a4/Temple_Jerusalem_model.jpg" },
+    "Naftali": { desc:"Galileia, ministério de Jesus.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/b/b7/Mount_Arbel_Galilee.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/d/db/Capernaum_synagogue.jpg" },
+    "Simeão": { desc:"Região sul de Canaã.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/e/ea/Beer_Sheva_ruins.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/0/06/Judea_Desert.jpg" },
+    "Gade": { desc:"Leste do Jordão.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/4/4e/Gilead_mountains.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/5/56/Decapolis_Gerasa_ruins.jpg" },
+    "Aser": { desc:"Região costeira.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/0/07/Acre_Israel.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/6/60/Ancient_Acre.jpg" },
+    "Issacar": { desc:"Vale de Jezreel.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/e/eb/Jezreel_Valley.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/c/c4/Nazareth_old_city.jpg" },
+    "Zebulom": { desc:"Região do Monte Tabor.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/a/a5/Cana_Israel.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/e/e0/Mount_Tabor.jpg" },
+    "Dã": { desc:"Norte de Israel.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/d/d6/Tel_Dan_nature_reserve.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/b/b7/Nature_in_Galilee.jpg" },
+    "José (Manassés & Efraim)": { desc:"Região de Samaria.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Samaria.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/a/aa/Jacob_Well.jpg" },
+    "Benjamim": { desc:"Pequeno território perto de Jerusalém.", imgTribo:"https://upload.wikimedia.org/wikipedia/commons/f/f1/Jerusalem_Temple_Mount.jpg", imgJesusEra:"https://upload.wikimedia.org/wikipedia/commons/4/4c/Gethsemane_Church.jpg" }
+  };
+  function loadTribes() {
+    const container = document.getElementById("tribeNamesList");
+    container.innerHTML = tribeNames.map(n => `<span class="tribe-badge" data-tribe="${n}">${n}</span>`).join('');
+    document.querySelectorAll('.tribe-badge').forEach(el => {
+      el.addEventListener('click', () => {
+        const tribe = el.getAttribute('data-tribe');
+        const info = tribeHistoricalData[tribe] || tribeHistoricalData["Judá"];
+        const panel = document.getElementById("tribeDetailPanel");
+        panel.style.display = "block";
+        panel.innerHTML = `
+          <h4>🏺 ${tribe}</h4>
+          <p>${info.desc}</p>
+          <div class="images-row">
+            <figure><img src="${info.imgTribo}" style="border-radius:20px;"><figcaption>Região histórica</figcaption></figure>
+            <figure><img src="${info.imgJesusEra}" style="border-radius:20px;"><figcaption>Época de Jesus</figcaption></figure>
+          </div>
+          <button class="btn-audio" id="tribeAudioBtn">🎧 Ouvir contexto</button>
+        `;
+        document.getElementById("tribeAudioBtn").onclick = () => speakSoftText(`Tribo de ${tribe}. ${info.desc}`, `Tribo ${tribe}`);
+      });
+    });
+  }
+
+  function setupJesusEra() {
+    const btn = document.getElementById("jesusEraBtn");
+    const panel = document.getElementById("jesusEraPanel");
+    btn.onclick = () => {
+      panel.innerHTML = `<div style="background:#2A2418; border-radius:24px; padding:14px;"><img src="https://upload.wikimedia.org/wikipedia/commons/6/66/Christus_Ravenna_Mosaic.jpg" style="width:100%; border-radius:20px;"><p>Jesus viveu na Galileia, Samaria e Judeia. As 12 tribos representam o povo de Deus.</p><button class="btn-audio" id="ctxAudioBtn">🔊 Ouvir contexto</button></div>`;
+      document.getElementById("ctxAudioBtn").onclick = () => speakSoftText("Época de Jesus: primeiro século, pregou o evangelho, curou enfermos e transformou a história.", "Contexto Jesus");
+    };
+  }
+
+  // ========== INICIALIZAÇÃO ==========
+  function init() {
+    updateMural();
+    populateBooks();
+    loadTribes();
+    setupJesusEra();
+    document.getElementById("bookSelect").addEventListener("change", updateChapters);
+    document.getElementById("chapterSelect").addEventListener("change", loadBookContent);
+    // Botão Lídia e Líbia
+    document.getElementById("lydiaLibyaAudioBtn").onclick = () => speakSoftText("Lídia foi uma comerciante de púrpura convertida por Paulo na cidade de Filipos, sendo a primeira cristã da Europa. A Líbia representa regiões africanas mencionadas na Bíblia, como na profecia de Ezequiel.", "Lídia e Líbia");
+    showToast("🎙️ Bíblia completa com áudio de voz suave! Selecione um capítulo e ouça.", 5000);
+  }
+  init();
+</script>
+</body>
+</html>
+```
+
